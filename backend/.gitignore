@@ -12,3 +12,4 @@ tmp/uploads/*
 !tmp/uploads/.gitkeep
 
 coverage
+dist
