@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -17,5 +17,13 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": [
+    "dist/**/*",
+    "coverage/**/*",
+    "jest.config.js",
+    "prettier.config.js",
+    "ormconfig.js",
+    "ormconfig.ts"
+  ]
 }
