@@ -79,6 +79,16 @@ services:
     depends_on:
       - barber-api
 
+  barber-mobile:
+    container_name: barber-mobile
+    build:
+      dockerfile: ./Dockerfile
+      context: ./mobile
+    networks:
+      - barber
+    volumes:
+      - ./mobile:/usr/src/app
+
 volumes:
   barber-postgres-volume:
    external: false
