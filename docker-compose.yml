@@ -84,6 +84,8 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./mobile
+      args:
+        BUILD_API_ENDPOINT: http://10.0.2.2:3333
     networks:
       - barber
     volumes:

@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-export const baseURL = 'http://10.0.2.2:3333';
+import baseURL from './config'
 
 export const baseURLify = (url: string): string => {
   return `${baseURL}${
