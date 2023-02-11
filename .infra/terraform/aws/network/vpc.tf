@@ -1,12 +1,14 @@
-resource "aws_vpc" "sre_wordpress_vpc" {
+resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
 
   tags = {
-    Name = "Wordpress Vpc"
+    Name = "${var.product} ${var.environment} Vpc"
+    Environment = var.environment
+    Terraformed = true
   }
 }
 
 output "vpc_id" {
-  value = aws_vpc.sre_wordpress_vpc.id
+  value = aws_vpc.vpc.id
 }

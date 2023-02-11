@@ -7,13 +7,26 @@ terraform {
   }
 
   required_version = ">= 1.2.9"
+
+  backend "s3" {
+    key    = "gobarber-terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
 }
 
+locals {
+  environment = terraform.workspace
+  product     = "Gobarber"
+}
+
 module "network" {
   source = "./aws/network"
+
+  environment = local.environment
+  product     = local.product
 
   vpc_cidr_block = "10.30.0.0/16"
 
