@@ -1,3 +1,5 @@
+name: Front - Build & Deploy
+
 on:
   push:
     branches:
@@ -9,9 +11,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
-    name: Test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Cache modules
+        uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.24.1
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Deploy
+        run: aws s3 sync ./dist s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
