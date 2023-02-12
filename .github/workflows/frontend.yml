@@ -1,4 +1,4 @@
-name: Front - Build & Deploy
+name: Frontend - Build & Deploy
 
 on:
   push:
@@ -35,7 +35,10 @@ jobs:
           node-version: 10.24.1
       - name: Install dependencies
         run: yarn
+        working-directory: ./frontend
       - name: Build
         run: yarn build
+        working-directory: ./frontend
       - name: Deploy
         run: aws s3 sync ./dist s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
+        working-directory: ./frontend
