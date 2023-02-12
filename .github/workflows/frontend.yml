@@ -43,7 +43,7 @@ jobs:
         run: yarn build
       - name: Deploy Staging
         if: github.ref == 'refs/heads/staging'
-        run: aws s3 sync ./frontend/build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
+        run: aws s3 sync ./build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
       - name: Deploy Production
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-        run: aws s3 sync ./frontend/build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_PRODUCTION }}
+        run: aws s3 sync ./build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_PRODUCTION }}
