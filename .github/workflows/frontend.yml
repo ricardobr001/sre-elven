@@ -53,6 +53,9 @@ jobs:
 
   deploy-production:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     needs: build
     name: Deploy Production
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
