@@ -13,6 +13,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+    name: Frontend - Build & Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,11 +38,8 @@ jobs:
         with:
           node-version: 10.24.1
       - name: Install dependencies
-        run: yarn
-        working-directory: ./frontend
+        run: yarn install --frozen-lockfile
       - name: Build
         run: yarn build
-        working-directory: ./frontend
       - name: Deploy
-        run: aws s3 sync ./dist s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
-        working-directory: ./frontend
+        run: aws s3 sync ./build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
