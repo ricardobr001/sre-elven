@@ -35,3 +35,10 @@ module "network" {
   private_az_a_subnet_cidr_block = "10.30.2.0/24"
   private_az_b_subnet_cidr_block = "10.30.3.0/24"
 }
+
+module "cloudfront" {
+  source = "./aws/cloudfront"
+
+  environment = local.environment
+  product     = local.product
+}
