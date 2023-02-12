@@ -1,3 +1,5 @@
+name: Frontend - Build & Deploy
+
 on:
   push:
     branches:
@@ -9,9 +11,44 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    name: Test
+    defaults:
+      run:
+        working-directory: ./frontend
+    name: Build & Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Cache modules
+        uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.24.1
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
+      - name: Test
+        run: yarn test
+      - name: Deploy Staging
+        if: github.ref == 'refs/heads/staging'
+        run: aws s3 sync ./build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_STAGING }}
+      - name: Deploy Production
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: aws s3 sync ./build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_PRODUCTION }}
+      - name: Invalidate Cloudfront Production
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: aws cloudfront create-invalidation --distribution=${{ secrets.AWS_FRONTEND_DISTRIBUTION_ID_PRODUCTION }} --paths "/*" --no-cli-pager
