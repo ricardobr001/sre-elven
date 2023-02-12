@@ -47,3 +47,6 @@ jobs:
       - name: Deploy Production
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         run: aws s3 sync ./build s3://${{ secrets.AWS_FRONTEND_BUCKET_NAME_PRODUCTION }}
+      - name: Invalidate Cloudfront Production
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: aws cloudfront create-invalidation --distribution=${{ secrets.AWS_FRONTEND_DISTRIBUTION_ID_PRODUCTION }} --paths "/*" --no-cli-pager
