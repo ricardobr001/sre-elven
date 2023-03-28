@@ -1,9 +1,7 @@
 TERRAFORM_VERSION= 1.2.9
-TFSTATE_BUCKET=<TFSTATE_BUCKET_NAME>
+TFSTATE_BUCKET=xpto
 
 DOCKER_COMMAND=\
-	AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>\
-	AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>\
 	TERRAFORM_VERSION=${TERRAFORM_VERSION}\
 	docker-compose run sre_terraform
 
@@ -32,7 +30,7 @@ use-production:
 
 bash:
 	 @${DOCKER_COMMAND} \
-	 	bash -c "ls -la"
+	 	bash -c "printenv | grep AWS"
 	
 init:
 	echo ${TFSTATE_BUCKET}

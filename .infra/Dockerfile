@@ -34,8 +34,8 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 RUN aws --version  
-RUN pip install cffi
-RUN pip install ansible
+# RUN pip install cffi
+# RUN pip install ansible
 
 RUN curl -s -L ${TFENV_URL} \
     -o /tmp/tfenv.tar.gz \
