@@ -1,5 +1,4 @@
 TERRAFORM_VERSION= 1.2.9
-TFSTATE_BUCKET=xpto
 
 DOCKER_COMMAND=\
 	TERRAFORM_VERSION=${TERRAFORM_VERSION}\
@@ -36,7 +35,7 @@ init:
 	echo ${TFSTATE_BUCKET}
 	 @${DOCKER_COMMAND} \
 	 	bash -c "tfenv use ${TERRAFORM_VERSION} && \
-		 terraform -chdir=terraform/ init -backend-config=\"bucket=${TFSTATE_BUCKET}\""
+		 terraform -chdir=terraform/ init"
 
 plan:
 	 @${DOCKER_COMMAND} \

@@ -9,6 +9,7 @@ terraform {
   required_version = ">= 1.2.9"
 
   backend "s3" {
+    bucket = "gobarber-state"
     key    = "gobarber-terraform.tfstate"
     region = "us-east-1"
   }
