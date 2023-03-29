@@ -37,16 +37,26 @@ module "network" {
   private_az_b_subnet_cidr_block = "10.30.3.0/24"
 }
 
-module "s3" {
-  source = "./aws/s3"
-
+module rds {
+  source = "./aws/rds"
+  
   environment = local.environment
   product     = local.product
+
+  vpc_id         = module.network.vpc_id
+  db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
 }
 
-module "cloudfront" {
-  source = "./aws/cloudfront"
+# module "s3" {
+#   source = "./aws/s3"
 
-  environment = local.environment
-  product     = local.product
-}
+#   environment = local.environment
+#   product     = local.product
+# }
+
+# module "cloudfront" {
+#   source = "./aws/cloudfront"
+
+#   environment = local.environment
+#   product     = local.product
+# }
