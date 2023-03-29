@@ -9,13 +9,16 @@ terraform {
   required_version = ">= 1.2.9"
 
   backend "s3" {
-    bucket = "gobarber-state"
     key    = "gobarber-terraform.tfstate"
     region = "us-east-1"
   }
 }
 
 provider "aws" {
+}
+
+data "external" "my_ip" {
+  program = ["/bin/bash", "${path.module}/scripts/whats-my-ip.sh"]
 }
 
 locals {
@@ -37,13 +40,25 @@ module "network" {
   private_az_b_subnet_cidr_block = "10.30.3.0/24"
 }
 
-module rds {
+module "rds" {
   source = "./aws/rds"
-  
+
+  my_ip       = format("%s/%s", data.external.my_ip.result["internet_ip"], 32)
   environment = local.environment
   product     = local.product
 
-  vpc_id         = module.network.vpc_id
+  vpc_id     = module.network.vpc_id
+  db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+}
+
+module "document_db" {
+  source = "./aws/document_db"
+
+  my_ip       = format("%s/%s", data.external.my_ip.result["internet_ip"], 32)
+  environment = local.environment
+  product     = local.product
+
+  vpc_id     = module.network.vpc_id
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
 }
 
