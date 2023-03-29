@@ -1,13 +1,9 @@
-variable db_subnets {
-  type        = list
+variable "db_subnets" {
+  type        = list(any)
   description = "Wordpress db subnet id"
 }
 
-data "external" "my_ip" {
-    program = ["/bin/bash", "${path.module}/scripts/whats-my-ip.sh"]
-}
-
-variable vpc_id {
+variable "vpc_id" {
   type        = string
   description = "description"
 }
@@ -20,4 +16,9 @@ variable "environment" {
 variable "product" {
   type        = string
   description = "Main product to host"
+}
+
+variable "my_ip" {
+  type        = string
+  description = "My public ip"
 }

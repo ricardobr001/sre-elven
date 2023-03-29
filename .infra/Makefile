@@ -29,10 +29,9 @@ use-production:
 
 bash:
 	 @${DOCKER_COMMAND} \
-	 	bash -c "printenv | grep AWS"
+	 	bash -c "(printenv ${AWS_S3_NAME})"
 	
 init:
-	echo ${TFSTATE_BUCKET}
 	 @${DOCKER_COMMAND} \
 	 	bash -c "tfenv use ${TERRAFORM_VERSION} && \
 		 terraform -chdir=terraform/ init"
