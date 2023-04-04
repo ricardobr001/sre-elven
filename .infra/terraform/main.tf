@@ -22,8 +22,14 @@ data "external" "my_ip" {
 }
 
 locals {
-  environment = terraform.workspace
-  product     = "Gobarber"
+  environment    = terraform.workspace
+  product        = "Gobarber"
+  vpc_cidr_block = "10.30.0.0/16"
+
+  public_az_a_subnet_cidr_block  = "10.30.0.0/24"
+  public_az_b_subnet_cidr_block  = "10.30.1.0/24"
+  private_az_a_subnet_cidr_block = "10.30.2.0/24"
+  private_az_b_subnet_cidr_block = "10.30.3.0/24"
 }
 
 module "network" {
@@ -32,12 +38,12 @@ module "network" {
   environment = local.environment
   product     = local.product
 
-  vpc_cidr_block = "10.30.0.0/16"
+  vpc_cidr_block = local.vpc_cidr_block
 
-  public_az_a_subnet_cidr_block  = "10.30.0.0/24"
-  public_az_b_subnet_cidr_block  = "10.30.1.0/24"
-  private_az_a_subnet_cidr_block = "10.30.2.0/24"
-  private_az_b_subnet_cidr_block = "10.30.3.0/24"
+  public_az_a_subnet_cidr_block  = local.public_az_a_subnet_cidr_block
+  public_az_b_subnet_cidr_block  = local.public_az_b_subnet_cidr_block
+  private_az_a_subnet_cidr_block = local.private_az_a_subnet_cidr_block
+  private_az_b_subnet_cidr_block = local.private_az_b_subnet_cidr_block
 }
 
 module "rds" {
@@ -49,6 +55,17 @@ module "rds" {
 
   vpc_id     = module.network.vpc_id
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+}
+
+module "elasticache" {
+  source = "./aws/elasticache"
+
+  environment = local.environment
+  product     = local.product
+
+  vpc_id              = module.network.vpc_id
+  redis_subnets       = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  private_cidr_blocks = [local.private_az_a_subnet_cidr_block, local.private_az_b_subnet_cidr_block]
 }
 
 module "document_db" {
