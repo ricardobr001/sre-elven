@@ -3,7 +3,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${var.product} ${var.environment} Vpc"
+    Name        = "${var.product} ${var.environment} Vpc"
     Environment = var.environment
     Terraformed = true
   }
