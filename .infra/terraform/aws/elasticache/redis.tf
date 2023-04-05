@@ -1,8 +1,8 @@
 resource "aws_elasticache_replication_group" "redis_replica" {
   automatic_failover_enabled  = true
   preferred_cache_cluster_azs = ["us-east-1a", "us-east-1b"]
-  replication_group_id        = "tf-rep-group-1"
-  description                 = "example description"
+  replication_group_id        = "${var.product}-redis-group-1"
+  description                 = "${var.product} redis cluster"
   node_type                   = "cache.t2.micro"
   engine_version              = "6.x"
   num_cache_clusters          = 2
@@ -18,9 +18,9 @@ resource "aws_elasticache_replication_group" "redis_replica" {
   }
 }
 
-resource "aws_elasticache_cluster" "cluster" {
+resource "aws_elasticache_cluster" "redis_cluster" {
   count = 1
 
-  cluster_id           = "tf-rep-group-1-${count.index}"
+  cluster_id           = "${var.product}-redis-group-${count.index}"
   replication_group_id = aws_elasticache_replication_group.redis_replica.id
 }

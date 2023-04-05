@@ -23,7 +23,7 @@ data "external" "my_ip" {
 
 locals {
   environment    = terraform.workspace
-  product        = "Gobarber"
+  product        = "gobarber"
   vpc_cidr_block = "10.30.0.0/16"
 
   public_az_a_subnet_cidr_block  = "10.30.0.0/24"
