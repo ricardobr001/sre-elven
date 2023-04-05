@@ -18,7 +18,7 @@ resource "aws_elasticache_replication_group" "redis_replica" {
   }
 }
 
-resource "aws_elasticache_cluster" "replica" {
+resource "aws_elasticache_cluster" "cluster" {
   count = 1
 
   cluster_id           = "tf-rep-group-1-${count.index}"
