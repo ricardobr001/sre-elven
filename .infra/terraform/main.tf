@@ -24,6 +24,7 @@ data "external" "my_ip" {
 locals {
   environment    = terraform.workspace
   product        = "gobarber"
+  cluster_name = "gobarber-eks-cluster"
   vpc_cidr_block = "10.30.0.0/16"
 
   public_az_a_subnet_cidr_block  = "10.30.0.0/24"
@@ -78,6 +79,46 @@ module "document_db" {
   vpc_id     = module.network.vpc_id
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
 }
+
+module ecr {
+  source = "./aws/ecr"
+
+  environment = local.environment
+  product     = local.product
+}
+
+module loadbalancer {
+  source = "./aws/loadbalancer"
+
+  environment = local.environment
+  product     = local.product
+
+  vpc_id      = module.network.vpc_id
+  gobarber_loadbalancer_subnets_ids = [module.network.public_az_a_subnet_id, module.network.public_az_b_subnet_id]
+}
+
+module ecs {
+  source = "./aws/ecs"
+
+  environment = local.environment
+  product     = local.product
+
+  ecr_image   = module.ecr.ecr_image_uri
+  vpc_id      = module.network.vpc_id
+  loadbalancer_security_group_id = module.loadbalancer.loadbalancer_security_group_id
+  loadbalancer_target_group_id = module.loadbalancer.loadbalancer_target_group_id
+  subnet_ids = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+}
+
+# module rds {
+#   source = "./aws/rds"
+  
+#   environment = local.environment
+#   product     = local.product
+
+#   vpc_id         = module.network.vpc_id
+#   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+# }
 
 # module "s3" {
 #   source = "./aws/s3"
