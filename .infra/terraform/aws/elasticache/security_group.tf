@@ -1,4 +1,5 @@
 resource "aws_security_group" "redis_security_group" {
+  name   = "${var.product}-redis-security-group"
   vpc_id = var.vpc_id
 
   ingress {

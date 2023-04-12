@@ -1,4 +1,5 @@
 resource "aws_security_group" "db_sg" {
+  name   = "${var.product}-postgres-security-group"
   vpc_id = var.vpc_id
 
   ingress {
@@ -18,7 +19,7 @@ resource "aws_security_group" "db_sg" {
   }
 
   tags = {
-    Name        = "${var.product} sb security group"
+    Name        = "${var.product} postgres security group"
     Environment = var.environment
     Terraformed = true
   }

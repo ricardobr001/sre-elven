@@ -9,15 +9,15 @@ resource "aws_db_subnet_group" "mongo_db_subnet_group" {
   subnet_ids = var.db_subnets
 
   tags = {
-    Name        = "${var.product} subnet group"
+    Name        = "${var.product} mongo subnet group"
     Environment = var.environment
     Terraformed = true
   }
 }
 
 resource "aws_docdb_cluster" "mongo" {
-  cluster_identifier     = "gobarber"
-  master_username        = "gobarber"
+  cluster_identifier     = var.product
+  master_username        = var.product
   master_password        = random_password.db_password.result
   availability_zones     = ["us-east-1a", "us-east-1b"]
   skip_final_snapshot    = true
