@@ -1,4 +1,5 @@
 resource "aws_security_group" "db_mongo_security_group" {
+  name   = "${var.product}-mongo-security-group"
   vpc_id = var.vpc_id
 
   ingress {
