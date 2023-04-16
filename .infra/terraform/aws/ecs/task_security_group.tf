@@ -15,4 +15,10 @@ resource "aws_security_group" "task_security_group" {
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = {
+    Name = "${var.product} task security group"
+    Environment = var.environment
+    Terraformed = true
+  }
 }
