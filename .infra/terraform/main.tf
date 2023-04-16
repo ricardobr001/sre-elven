@@ -33,19 +33,19 @@ locals {
   private_az_b_subnet_cidr_block = "10.30.3.0/24"
 }
 
-module "network" {
-  source = "./aws/network"
+# module "network" {
+#   source = "./aws/network"
 
-  environment = local.environment
-  product     = local.product
+#   environment = local.environment
+#   product     = local.product
 
-  vpc_cidr_block = local.vpc_cidr_block
+#   vpc_cidr_block = local.vpc_cidr_block
 
-  public_az_a_subnet_cidr_block  = local.public_az_a_subnet_cidr_block
-  public_az_b_subnet_cidr_block  = local.public_az_b_subnet_cidr_block
-  private_az_a_subnet_cidr_block = local.private_az_a_subnet_cidr_block
-  private_az_b_subnet_cidr_block = local.private_az_b_subnet_cidr_block
-}
+#   public_az_a_subnet_cidr_block  = local.public_az_a_subnet_cidr_block
+#   public_az_b_subnet_cidr_block  = local.public_az_b_subnet_cidr_block
+#   private_az_a_subnet_cidr_block = local.private_az_a_subnet_cidr_block
+#   private_az_b_subnet_cidr_block = local.private_az_b_subnet_cidr_block
+# }
 
 # module "rds" {
 #   source = "./aws/rds"
