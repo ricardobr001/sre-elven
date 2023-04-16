@@ -9,13 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   name: Test
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-    build-tag-push:
+  build-tag-push:
     runs-on: ubuntu-latest
     name: Build and push image to ECR registry
     steps:
@@ -36,27 +30,26 @@ jobs:
       - name: Get Branch Name
         id: get_branch
         run: |
-          if [[ "${{github.base_ref}}" == "master" || "${{github.ref}}" == "refs/heads/master" ]]; then
+          if [[ "${{github.base_ref}}" == "feat-add-pipe" || "${{github.ref}}" == "refs/heads/feat-add-pipe" ]]; then
             echo "::set-output name=branch::production"
           else
             echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
           fi
-
       - name: Create Image Name
         id: image_name
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: gobarber-{{ steps.get_branch.outputs.branch }}
+          ECR_REPOSITORY: gobarber-${{ steps.get_branch.outputs.branch }}
           IMAGE_TAG: latest
         run: echo ::set-output name=image_name::${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
-          
+
       - name: Build
         id: build
-        working-directory: gcid
+        working-directory: backend
         env:
           BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
           IMAGE_NAME: ${{ steps.image_name.outputs.image_name }}
-          DOCKERFILE_PATH: backend/Dockerfile
+          DOCKERFILE_PATH: Dockerfile
         run: |
           docker build --build-arg BUILD_NODE_ENV=${BRANCH_NAME} \
             -f ${DOCKERFILE_PATH} \
