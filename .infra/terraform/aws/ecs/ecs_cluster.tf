@@ -19,4 +19,10 @@ resource "aws_ecs_service" "ecs_service" {
     container_name   = "${var.product}-${var.environment}-app"
     container_port   = 8080
   }
+
+  tags = {
+    Name = "${var.product} ECS Cluster"
+    Environment = var.environment
+    Terraformed = true
+  }
 }

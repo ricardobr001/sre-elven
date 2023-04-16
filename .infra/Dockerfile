@@ -28,8 +28,8 @@ RUN apk add --quiet --update --no-cache \
 RUN apk add --no-cache \
         python3 \
         py3-pip \
-    && pip3 install --upgrade pip \
-    && pip3 install --no-cache-dir \
+    && pip3 install --upgrade --default-timeout=100 pip \
+    && pip3 install --default-timeout=100 --no-cache-dir \
         awscli \
     && rm -rf /var/cache/apk/*
 
