@@ -33,10 +33,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Get Repository Name
-        id: get_repository
-        run: echo ::set-output name=repository::${GITHUB_REPOSITORY#GamersClub/} | tr '[:upper:]' '[:lower:]'
-
       - name: Get Branch Name
         id: get_branch
         run: |
