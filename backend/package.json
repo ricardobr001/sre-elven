@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
-    "start:prod": "node -r ./tsconfig-paths-bootstrap.js dist/src/shared/infra/http/server.js",
+    "start:prod": "node -r ./tsconfig-paths-bootstrap.js dist/shared/infra/http/server.js",
     "build": "tsc",
     "typeorm:dev": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ./ormconfig.ts",
     "typeorm:prod": "node -r ./tsconfig-paths-bootstrap.js ./node_modules/typeorm/cli.js --config ./ormconfig.js",
@@ -52,9 +52,7 @@
     "tsyringe": "^4.2.0",
     "typeorm": "^0.2.24",
     "typescript": "^3.8.3",
-    "uuidv4": "^6.0.8"
-  },
-  "devDependencies": {
+    "uuidv4": "^6.0.8",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
