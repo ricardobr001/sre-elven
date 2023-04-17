@@ -6,7 +6,11 @@ To run this terraform, you'll need to create the `.env` file with your credentia
 cp .env.example .env
 ```
 
-After that, you need to create a bucket in the s3 with the name `gobarber-state` and then run the following command to create the infra in AWS
+You also will need to create a bucket in the s3 and add its name in the already mentioned `.env` file
+
+Before terraforming, check if you have the `ecsTaskExecutionRole` role created in your AWS account (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html)
+
+Then run the following command to create the infra in AWS
 
 ```sh
 make init
