@@ -32,3 +32,8 @@ variable "subnet_ids" {
   type        = list(string)
   description = "Private subnet ids"
 }
+
+variable "secret_id" {
+  type        = string
+  description = "Secret id"
+}

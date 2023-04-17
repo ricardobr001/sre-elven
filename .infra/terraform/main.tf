@@ -97,11 +97,13 @@ module "ecs" {
   loadbalancer_security_group_id = module.loadbalancer.loadbalancer_security_group_id
   loadbalancer_target_group_id   = module.loadbalancer.loadbalancer_target_group_id
   subnet_ids                     = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  secret_id                      = module.secretsmanager.secret_id
 }
 
 module "rds" {
   source = "./aws/rds"
 
+  my_ip       = format("%s/%s", data.external.my_ip.result["internet_ip"], 32)
   environment = local.environment
   product     = local.product
 
@@ -109,16 +111,23 @@ module "rds" {
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
 }
 
-module "s3" {
-  source = "./aws/s3"
+module "secretsmanager" {
+  source = "./aws/secretsmanager"
 
   environment = local.environment
   product     = local.product
 }
 
-module "cloudfront" {
-  source = "./aws/cloudfront"
+# module "s3" {
+#   source = "./aws/s3"
 
-  environment = local.environment
-  product     = local.product
-}
+#   environment = local.environment
+#   product     = local.product
+# }
+
+# module "cloudfront" {
+#   source = "./aws/cloudfront"
+
+#   environment = local.environment
+#   product     = local.product
+# }
