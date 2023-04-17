@@ -4,8 +4,8 @@ resource "aws_security_group" "redis_security_group" {
 
   ingress {
     description = "TCP"
-    from_port   = 27017
-    to_port     = 27017
+    from_port   = 6379
+    to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = var.private_cidr_blocks
   }
