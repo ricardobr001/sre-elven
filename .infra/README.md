@@ -18,3 +18,16 @@ make create-workspaces
 make plan # see what is going to be changed
 make apply # apply the changes
 ```
+
+## Pipeline
+Alguns secrets são necessários para a execução da pipeline no Github Actions:
+
+|Secret|Descrição|
+|--|--|
+|AWS_ACCESS_KEY_ID|ID da chave de acesso da AWS|
+|AWS_SECRET_ACCESS_KEY|Chave de acesso da AWS|
+|AWS_FRONTEND_BUCKET_NAME_STAGING|Bucket do frontend para o ambiente de staging  (criado via terraform)|
+|AWS_FRONTEND_DISTRIBUTION_ID_STAGING|ID da distribuição do Cloudfront para o ambiente de Staging (criado via terraform)|
+|AWS_FRONTEND_BUCKET_NAME_PRODUCTION|Bucket do frontend para o ambiente de production (criado via terraform)|
+|AWS_FRONTEND_DISTRIBUTION_ID_PRODUCTION|ID da distribuição do Cloudfront para o ambiente de production (criado via terraform)|
+
