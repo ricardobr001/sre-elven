@@ -5,11 +5,11 @@ https://aprenda.elven.works/programa-de-formacao-sre
 Uma aplicação antiga (https://github.com/arfurlaneto/bootcamp-gostack11-gobarber) foi modernizada utilizando Cloud, IaC, Containers e Github Actions.
 
 ### Membros
-- Antonio Furlaneto
-- Maria Clara
-- Ricardo Mendes
+- Antonio Furlaneto (https://github.com/arfurlaneto)
+- Maria Clara (https://github.com/claramelo)
+- Ricardo Mendes (https://github.com/ricardobr001)
 
-### Capítulos Abordados:
+### Capítulos Abordados
 - Cloud Platforms and Architecture
 - Computer Networks
 - Infrastructure as Code
@@ -18,7 +18,7 @@ Uma aplicação antiga (https://github.com/arfurlaneto/bootcamp-gostack11-gobarb
 
 # Aplicação
 ## Descrição
-Desenvolvida durante um bootcamp da Rocketseat, se trata de um serviço para cabeleiros, com módulo de gerenciamento web para os profissionais e um aplicativo de celular para o agendamento para os clientes.
+Desenvolvida durante um bootcamp da Rocketseat, se trata de um serviço para cabeleireiros, com módulo de gerenciamento web para os profissionais e um aplicativo de celular para o agendamento para os clientes.
 
 ## Componentes
 ### Backend
@@ -39,3 +39,6 @@ Utilizado para armazenar alguns tipos de dados menos importantes, como notifica�
 
 ### Redis
 Utilizado como mecanismos de cache para a aplicação.
+
+# Aplicação
+Detalhes de como executar a aplicação em [README.md](.infra/README.md).
