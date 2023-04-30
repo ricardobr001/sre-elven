@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "gobarber-logs-backend",
+        "awslogs-group": "${var.product}-${var.environment}-logs-backend",
         "awslogs-create-group": "true",
         "awslogs-region": "us-east-1",
         "awslogs-stream-prefix": "ecs"
