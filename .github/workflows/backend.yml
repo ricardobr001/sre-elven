@@ -3,7 +3,6 @@ on:
     branches:
       - homolog
       - master
-      - feat-add-pipe
     paths:
       - backend/**
   workflow_dispatch:
@@ -30,7 +29,7 @@ jobs:
       - name: Get Branch Name
         id: get_branch
         run: |
-          if [[ "${{github.base_ref}}" == "feat-add-pipe" || "${{github.ref}}" == "refs/heads/feat-add-pipe" ]]; then
+          if [[ "${{github.base_ref}}" == "master" || "${{github.ref}}" == "refs/heads/master" ]]; then
             echo "::set-output name=branch::production"
           else
             echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
