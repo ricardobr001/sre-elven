@@ -22,3 +22,8 @@ variable "my_ip" {
   type        = string
   description = "My public ip"
 }
+
+variable "private_cidr_blocks" {
+  type        = list(string)
+  description = "VPC cidr blocks"
+}

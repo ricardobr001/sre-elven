@@ -109,6 +109,7 @@ module "rds" {
 
   vpc_id     = module.network.vpc_id
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  private_cidr_blocks = [local.private_az_a_subnet_cidr_block, local.private_az_b_subnet_cidr_block]
 }
 
 module "secretsmanager" {
