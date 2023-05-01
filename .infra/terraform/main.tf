@@ -24,7 +24,7 @@ data "external" "my_ip" {
 locals {
   environment    = terraform.workspace
   product        = "gobarber"
-  cluster_name = "gobarber-eks-cluster"
+  cluster_name   = "gobarber-eks-cluster"
   vpc_cidr_block = "10.30.0.0/16"
 
   public_az_a_subnet_cidr_block  = "10.30.0.0/24"
@@ -45,17 +45,6 @@ module "network" {
   public_az_b_subnet_cidr_block  = local.public_az_b_subnet_cidr_block
   private_az_a_subnet_cidr_block = local.private_az_a_subnet_cidr_block
   private_az_b_subnet_cidr_block = local.private_az_b_subnet_cidr_block
-}
-
-module "rds" {
-  source = "./aws/rds"
-
-  my_ip       = format("%s/%s", data.external.my_ip.result["internet_ip"], 32)
-  environment = local.environment
-  product     = local.product
-
-  vpc_id     = module.network.vpc_id
-  db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
 }
 
 module "elasticache" {
@@ -80,45 +69,55 @@ module "document_db" {
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
 }
 
-module ecr {
+module "ecr" {
   source = "./aws/ecr"
 
   environment = local.environment
   product     = local.product
 }
 
-module loadbalancer {
+module "loadbalancer" {
   source = "./aws/loadbalancer"
 
   environment = local.environment
   product     = local.product
 
-  vpc_id      = module.network.vpc_id
+  vpc_id                            = module.network.vpc_id
   gobarber_loadbalancer_subnets_ids = [module.network.public_az_a_subnet_id, module.network.public_az_b_subnet_id]
 }
 
-module ecs {
+module "ecs" {
   source = "./aws/ecs"
 
   environment = local.environment
   product     = local.product
 
-  ecr_image   = module.ecr.ecr_image_uri
-  vpc_id      = module.network.vpc_id
+  ecr_image                      = module.ecr.ecr_image_uri
+  vpc_id                         = module.network.vpc_id
   loadbalancer_security_group_id = module.loadbalancer.loadbalancer_security_group_id
-  loadbalancer_target_group_id = module.loadbalancer.loadbalancer_target_group_id
-  subnet_ids = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  loadbalancer_target_group_id   = module.loadbalancer.loadbalancer_target_group_id
+  subnet_ids                     = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  secret_id                      = module.secretsmanager.secret_id
 }
 
-# module rds {
-#   source = "./aws/rds"
-  
-#   environment = local.environment
-#   product     = local.product
+module "rds" {
+  source = "./aws/rds"
 
-#   vpc_id         = module.network.vpc_id
-#   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
-# }
+  my_ip       = format("%s/%s", data.external.my_ip.result["internet_ip"], 32)
+  environment = local.environment
+  product     = local.product
+
+  vpc_id     = module.network.vpc_id
+  db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  private_cidr_blocks = [local.private_az_a_subnet_cidr_block, local.private_az_b_subnet_cidr_block]
+}
+
+module "secretsmanager" {
+  source = "./aws/secretsmanager"
+
+  environment = local.environment
+  product     = local.product
+}
 
 # module "s3" {
 #   source = "./aws/s3"

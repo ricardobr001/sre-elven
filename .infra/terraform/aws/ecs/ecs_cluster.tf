@@ -17,6 +17,12 @@ resource "aws_ecs_service" "ecs_service" {
   load_balancer {
     target_group_arn = var.loadbalancer_target_group_id
     container_name   = "${var.product}-${var.environment}-app"
-    container_port   = 8080
+    container_port   = 3333
+  }
+
+  tags = {
+    Name        = "${var.product} ECS Cluster"
+    Environment = var.environment
+    Terraformed = true
   }
 }

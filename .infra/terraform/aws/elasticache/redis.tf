@@ -9,6 +9,7 @@ resource "aws_elasticache_replication_group" "redis_replica" {
   parameter_group_name        = "default.redis6.x"
   port                        = 6379
   subnet_group_name           = aws_elasticache_subnet_group.redis_subnet_group.name
+  security_group_ids          = [aws_security_group.redis_security_group.id]
   multi_az_enabled            = true
 
   tags = {

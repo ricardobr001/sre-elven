@@ -79,17 +79,17 @@ services:
     depends_on:
       - barber-api
 
-  barber-mobile:
-    container_name: barber-mobile
-    build:
-      dockerfile: ./Dockerfile
-      context: ./mobile
-      args:
-        BUILD_API_ENDPOINT: http://10.0.2.2:3333
-    networks:
-      - barber
-    volumes:
-      - ./mobile:/usr/src/app
+  # barber-mobile:
+  #   container_name: barber-mobile
+  #   build:
+  #     dockerfile: ./Dockerfile
+  #     context: ./mobile
+  #     args:
+  #       BUILD_API_ENDPOINT: http://10.0.2.2:3333
+  #   networks:
+  #     - barber
+  #   volumes:
+  #     - ./mobile:/usr/src/app
 
 volumes:
   barber-postgres-volume:
