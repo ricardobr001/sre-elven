@@ -4,6 +4,7 @@ data "aws_iam_role" "ecs_task_execution_role" {
 
 resource "aws_secretsmanager_secret_version" "secrets" {
   secret_id = var.secret_id
+  secret_string = "{}"
 }
 
 locals {
