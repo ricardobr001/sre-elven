@@ -1,7 +1,7 @@
 resource "aws_elasticache_replication_group" "redis_replica" {
   automatic_failover_enabled  = true
   preferred_cache_cluster_azs = ["us-east-1a", "us-east-1b"]
-  replication_group_id        = "${var.product}-redis-group-1"
+  replication_group_id        = "${var.product}-redis-group-0"
   description                 = "${var.product} redis cluster"
   node_type                   = "cache.t2.micro"
   engine_version              = "6.x"

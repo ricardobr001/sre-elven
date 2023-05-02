@@ -2,12 +2,12 @@ data "aws_iam_role" "ecs_task_execution_role" {
   name = "ecsTaskExecutionRole"
 }
 
-data "aws_secretsmanager_secret_version" "secrets" {
+resource "aws_secretsmanager_secret_version" "secrets" {
   secret_id = var.secret_id
 }
 
 locals {
-  mailing_secrets = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)
+  mailing_secrets = jsondecode(resource.aws_secretsmanager_secret_version.secrets.secret_string)
 
   mailing_secrets_list = [
     for name, value in local.mailing_secrets : {
