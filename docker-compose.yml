@@ -1,0 +1,102 @@
+version: "3"
+
+services:
+  barber-postgres:
+    container_name: barber-postgres
+    image: postgres:11
+    env_file: ./backend/.env.development
+    volumes:
+      - barber-postgres-volume:/var/lib/postgresql
+    #ports:
+    #  - 5432:5432
+    networks:
+      - barber
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  barber-mongo:
+    container_name: barber-mongo
+    image: mongo
+    volumes:
+      - barber-mongo-volume:/data/db
+    #ports:
+    #  - 27017:27017
+    networks:
+      - barber
+
+  barber-redis:
+    container_name: barber-redis
+    image: redis:alpine
+    #ports:
+    #  - 6379:6379
+    networks:
+      - barber
+
+  barber-migration:
+    container_name: barber-migration
+    build:
+      dockerfile: ./Dockerfile
+      context: ./backend
+    networks:
+      - barber
+    env_file: ./backend/.env.development
+    entrypoint: yarn typeorm:prod migration:run
+    depends_on:
+       barber-postgres:
+          condition: service_healthy
+
+  barber-api:
+    container_name: barber-api
+    build:
+      dockerfile: ./Dockerfile
+      context: ./backend
+    ports:
+      - 3333:3333
+    networks:
+      - barber
+    env_file: ./backend/.env.development
+    depends_on:
+      - barber-postgres
+      - barber-mongo
+      - barber-redis
+      - barber-migration
+
+  barber-front:
+    container_name: barber-front
+    build:
+      dockerfile: ./Dockerfile
+      context: ./frontend
+      args:
+        BUILD_API_ENDPOINT: http://localhost:3333
+    ports:
+      - 80:80
+    networks:
+      - barber
+    env_file: ./backend/.env.development
+    depends_on:
+      - barber-api
+
+  # barber-mobile:
+  #   container_name: barber-mobile
+  #   build:
+  #     dockerfile: ./Dockerfile
+  #     context: ./mobile
+  #     args:
+  #       BUILD_API_ENDPOINT: http://10.0.2.2:3333
+  #   networks:
+  #     - barber
+  #   volumes:
+  #     - ./mobile:/usr/src/app
+
+volumes:
+  barber-postgres-volume:
+   external: false
+  barber-mongo-volume:
+    external: false
+
+networks:
+  barber:
+    external: false

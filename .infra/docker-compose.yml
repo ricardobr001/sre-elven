@@ -1,0 +1,15 @@
+version: '3.0'
+
+services:
+    sre_terraform:
+      build:
+        context: .
+        args:
+          - TERRAFORM_VERSION=${TERRAFORM_VERSION}
+      image: sre_terraform
+      env_file: .env
+      volumes:
+        - ./terraform:/app/terraform
+        - ./ansible:/app/ansible
+        - ./ssh/:/app/ssh
+      working_dir: /app

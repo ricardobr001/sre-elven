@@ -1,0 +1,60 @@
+on:
+  push:
+    branches:
+      - homolog
+      - master
+    paths:
+      - backend/**
+  workflow_dispatch:
+
+jobs:
+  build-tag-push:
+    runs-on: ubuntu-latest
+    name: Build and push image to ECR registry
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ECR_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get Branch Name
+        id: get_branch
+        run: |
+          if [[ "${{github.base_ref}}" == "master" || "${{github.ref}}" == "refs/heads/master" ]]; then
+            echo "::set-output name=branch::production"
+          else
+            echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+          fi
+      - name: Create Image Name
+        id: image_name
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: gobarber-${{ steps.get_branch.outputs.branch }}
+          IMAGE_TAG: latest
+        run: echo ::set-output name=image_name::${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+
+      - name: Build
+        id: build
+        working-directory: backend
+        env:
+          BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
+          IMAGE_NAME: ${{ steps.image_name.outputs.image_name }}
+          DOCKERFILE_PATH: Dockerfile
+        run: |
+          docker build --build-arg BUILD_NODE_ENV=${BRANCH_NAME} \
+            -f ${DOCKERFILE_PATH} \
+            -t ${IMAGE_NAME} .
+      - name: Push to ECR
+        env:
+          IMAGE_NAME: ${{ steps.image_name.outputs.image_name }}
+        run: |
+          docker push ${IMAGE_NAME}
