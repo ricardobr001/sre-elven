@@ -22,6 +22,7 @@ module.exports = [
     password: process.env.MONGO_PASSWORD,
     database: process.env.MONGO_DATABASE,
     useUnifiedTopology: true,
+    sslValidate: false,
     entities: ['./src/modules/**/infra/typeorm/schemas/*.ts'],
     synchronize: true,
   },
