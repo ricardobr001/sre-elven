@@ -1,5 +1,6 @@
 module.exports = [
   {
+    "name": "postgres",
     "type": "postgres",
     "host": process.env.POSTGRES_HOST,
     "port": process.env.POSTGRES_PORT,
