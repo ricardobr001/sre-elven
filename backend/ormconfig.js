@@ -1,6 +1,5 @@
 module.exports = [
   {
-    "name": "postgres",
     "type": "postgres",
     "host": process.env.POSTGRES_HOST,
     "port": process.env.POSTGRES_PORT,
@@ -11,14 +10,13 @@ module.exports = [
     "migrations": ["./dist/shared/infra/typeorm/migrations/*.js"],
     "cli": {
       "migrationsDir": "./dist/shared/infra/typeorm/migrations/"
-    }
+    },
+    "runMigrations": true
   },
   {
     "name": "mongo",
     "type": "mongodb",
-    "host": process.env.MONGO_HOST,
-    "port": process.env.MONGO_PORT,
-    "database": process.env.MONGO_DATABASE,
+    "url": process.env.MONGO_URL,
     "useUnifiedTopology": true,
     "entities": ["./dist/modules/**/infra/typeorm/schemas/*.js"]
   }
