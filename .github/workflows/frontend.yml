@@ -39,8 +39,13 @@ jobs:
           node-version: 10.24.1
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Build
-        run: yarn build
+     
+      - name: Build Staging
+        if: github.ref == 'refs/heads/staging'
+        run: REACT_APP_API_ENDPOINT=${{ secrets.AWS_FRONTEND_API_URL_STAGING }} yarn build 
+      - name: Build Production
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        run: REACT_APP_API_ENDPOINT=${{ secrets.AWS_FRONTEND_API_URL_PRODUCTION }} yarn build
       - name: Test
         run: yarn test
       - name: Deploy Staging
