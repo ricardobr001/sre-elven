@@ -16,8 +16,11 @@ module.exports = [
   {
     name: 'mongo',
     type: 'mongodb',
-    url: process.env.MONGO_URL,
-    useNewUrlParser: true,
+    host: process.env.MONGO_HOST,
+    port: process.env.MONGO_PORT,
+    username: process.env.MONGO_USERNAME,
+    password: process.env.MONGO_PASSWORD,
+    database: process.env.MONGO_DATABASE,
     useUnifiedTopology: true,
     entities: ['./src/modules/**/infra/typeorm/schemas/*.ts'],
     synchronize: true,
