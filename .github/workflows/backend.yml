@@ -42,6 +42,13 @@ jobs:
           IMAGE_TAG: latest
         run: echo ::set-output name=image_name::${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
 
+      - name: Create .env File
+        working-directory: backend
+        run: 'echo "$ENV" > .env'
+        shell: bash
+        env:
+          ENV: ${{secrets.AWS_BACKEND_ENV_PRODUCTION}}
+
       - name: Build
         id: build
         working-directory: backend
