@@ -8,10 +8,10 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
-resource "aws_s3_bucket_acl" "bucket_acl" {
-  bucket = aws_s3_bucket.bucket.id
-  acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "bucket_acl" {
+#   bucket = aws_s3_bucket.bucket.id
+#   acl    = "private"
+# }
 
 resource "aws_s3_bucket_public_access_block" "bucket_public_block" {
   bucket                  = aws_s3_bucket.bucket.id
@@ -38,26 +38,4 @@ resource "aws_s3_bucket_website_configuration" "bucket_website" {
   error_document {
     key = "error.html"
   }
-}
-
-resource "aws_cloudfront_origin_access_identity" "oai" {
-}
-
-data "aws_iam_policy_document" "bucket_policy_document" {
-  statement {
-    actions = ["s3:GetObject"]
-    resources = [
-      aws_s3_bucket.bucket.arn,
-      "${aws_s3_bucket.bucket.arn}/*"
-    ]
-    principals {
-      type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.oai.iam_arn]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.bucket_policy_document.json
 }

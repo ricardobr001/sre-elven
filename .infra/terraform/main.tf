@@ -119,16 +119,9 @@ module "secretsmanager" {
   product     = local.product
 }
 
-# module "s3" {
-#   source = "./aws/s3"
+module "cloudfront" {
+  source = "./aws/cloudfront"
 
-#   environment = local.environment
-#   product     = local.product
-# }
-
-# module "cloudfront" {
-#   source = "./aws/cloudfront"
-
-#   environment = local.environment
-#   product     = local.product
-# }
+  environment = local.environment
+  product     = local.product
+}
