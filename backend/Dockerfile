@@ -13,4 +13,3 @@ RUN yarn build
 
 EXPOSE 3333
 ENTRYPOINT ["yarn", "start:prod"]
-# trigger deploy
