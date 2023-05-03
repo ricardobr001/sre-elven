@@ -11,7 +11,7 @@ module.exports = [
     cli: {
       migrationsDir: './src/shared/infra/typeorm/migrations/',
     },
-    "synchronize": true,
+    migrationsRun: true
   },
   {
     name: 'mongo',
@@ -24,6 +24,5 @@ module.exports = [
     useUnifiedTopology: true,
     sslValidate: false,
     entities: ['./src/modules/**/infra/typeorm/schemas/*.ts'],
-    synchronize: true,
   },
 ];
