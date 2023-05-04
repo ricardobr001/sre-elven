@@ -27,3 +27,8 @@ variable "private_cidr_blocks" {
   type        = list(string)
   description = "VPC cidr blocks"
 }
+
+variable "db_password" {
+  type        = string
+  description = "DB Password"
+}

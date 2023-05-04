@@ -1,9 +1,3 @@
-resource "random_password" "db_password" {
-  length           = 16
-  special          = true
-  override_special = "!*_-"
-}
-
 resource "aws_db_subnet_group" "db_subnet_group" {
   name       = "${var.product}_db_subnet_group"
   subnet_ids = var.db_subnets
@@ -44,7 +38,7 @@ resource "aws_db_instance" "db" {
   instance_class          = "db.t2.micro"
   db_name                 = var.product
   username                = var.product
-  password                = random_password.db_password.result
+  password                = var.db_password
   skip_final_snapshot     = true
   vpc_security_group_ids  = [aws_security_group.db_sg.id]
   backup_retention_period = 7
