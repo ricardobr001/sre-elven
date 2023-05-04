@@ -7,7 +7,7 @@ resource "aws_security_group" "db_mongo_security_group" {
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip]
+    cidr_blocks = var.private_cidr_blocks
   }
 
   egress {

@@ -21,6 +21,14 @@ data "external" "my_ip" {
   program = ["/bin/bash", "${path.module}/scripts/whats-my-ip.sh"]
 }
 
+variable "RDS_PASSWORD" {
+  type = string
+}
+
+variable "DOCUMENT_DB_PASSWORD" {
+  type = string
+}
+
 locals {
   environment    = terraform.workspace
   product        = "gobarber"
@@ -65,8 +73,11 @@ module "document_db" {
   environment = local.environment
   product     = local.product
 
-  vpc_id     = module.network.vpc_id
-  db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+  vpc_id              = module.network.vpc_id
+  private_cidr_blocks = [local.private_az_a_subnet_cidr_block, local.private_az_b_subnet_cidr_block]
+  db_subnets          = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
+
+  db_password = var.DOCUMENT_DB_PASSWORD
 }
 
 module "ecr" {
@@ -110,6 +121,8 @@ module "rds" {
   vpc_id     = module.network.vpc_id
   db_subnets = [module.network.private_az_a_subnet_id, module.network.private_az_b_subnet_id]
   private_cidr_blocks = [local.private_az_a_subnet_cidr_block, local.private_az_b_subnet_cidr_block]
+
+  db_password = var.RDS_PASSWORD
 }
 
 module "secretsmanager" {

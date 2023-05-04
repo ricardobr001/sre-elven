@@ -18,7 +18,17 @@ variable "vpc_id" {
   description = "vpc id"
 }
 
+variable "private_cidr_blocks" {
+  type        = list(string)
+  description = "VPC cidr blocks"
+}
+
 variable "db_subnets" {
   type        = list(string)
   description = "Mongo db subnet ids"
+}
+
+variable "db_password" {
+  type        = string
+  description = "DB Password"
 }

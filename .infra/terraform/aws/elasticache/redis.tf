@@ -19,9 +19,3 @@ resource "aws_elasticache_replication_group" "redis_replica" {
   }
 }
 
-resource "aws_elasticache_cluster" "redis_cluster" {
-  count = 1
-
-  cluster_id           = "${var.product}-redis-group-${count.index}"
-  replication_group_id = aws_elasticache_replication_group.redis_replica.id
-}

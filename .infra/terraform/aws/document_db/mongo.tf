@@ -1,9 +1,3 @@
-resource "random_password" "db_password" {
-  length           = 16
-  special          = true
-  override_special = "!*_-"
-}
-
 resource "aws_db_subnet_group" "mongo_db_subnet_group" {
   name       = "mongo_db_subnet_group"
   subnet_ids = var.db_subnets
@@ -15,15 +9,26 @@ resource "aws_db_subnet_group" "mongo_db_subnet_group" {
   }
 }
 
+resource "aws_docdb_cluster_parameter_group" "mongo_parameter_group" {
+  family      = "docdb4.0"
+  name        = "gobarber-mongo"
+
+  parameter {
+    name  = "tls"
+    value = "disabled"
+  }
+}
+
 resource "aws_docdb_cluster" "mongo" {
   cluster_identifier     = var.product
   master_username        = var.product
-  master_password        = random_password.db_password.result
-  availability_zones     = ["us-east-1a", "us-east-1b"]
+  master_password        = var.db_password
+  availability_zones     = ["us-east-1a", "us-east-1b", "us-east-1c"]
   skip_final_snapshot    = true
   apply_immediately      = true
   vpc_security_group_ids = [aws_security_group.db_mongo_security_group.id]
   db_subnet_group_name   = aws_db_subnet_group.mongo_db_subnet_group.name
+  db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.mongo_parameter_group.name
 
   tags = {
     Name        = "${var.product} mongo db cluster"

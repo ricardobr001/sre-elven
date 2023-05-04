@@ -33,6 +33,20 @@ resource "aws_cloudfront_distribution" "tf" {
   enabled = true
   default_root_object = "index.html"
 
+  custom_error_response {
+      error_code = 403
+      error_caching_min_ttl = 300
+      response_page_path = "/index.html"
+      response_code = 200
+    }
+
+  custom_error_response {
+    error_code = 404
+    error_caching_min_ttl = 300
+    response_page_path = "/index.html"
+    response_code = 200
+  }
+
   default_cache_behavior {
     viewer_protocol_policy = "redirect-to-https"
     compress = true
@@ -56,7 +70,7 @@ resource "aws_cloudfront_distribution" "tf" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
-    ssl_support_method = "sni-only"
+    #ssl_support_method = "sni-only"
   }
 
   tags = {
