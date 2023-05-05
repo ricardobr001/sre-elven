@@ -7,7 +7,7 @@ Uma aplicação antiga (https://github.com/arfurlaneto/bootcamp-gostack11-gobarb
 ### Membros
 - Antonio Furlaneto (https://github.com/arfurlaneto)
 - Maria Clara (https://github.com/claramelo)
-1- Ricardo Mendes (https://github.com/ricardobr001)
+- Ricardo Mendes (https://github.com/ricardobr001)
 
 ### Capítulos Abordados
 - Cloud Platforms and Architecture
