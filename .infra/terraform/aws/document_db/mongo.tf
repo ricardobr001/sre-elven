@@ -23,7 +23,6 @@ resource "aws_docdb_cluster" "mongo" {
   cluster_identifier     = var.product
   master_username        = var.product
   master_password        = var.db_password
-  availability_zones     = ["us-east-1a", "us-east-1b", "us-east-1c"]
   skip_final_snapshot    = true
   apply_immediately      = true
   vpc_security_group_ids = [aws_security_group.db_mongo_security_group.id]
