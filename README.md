@@ -26,7 +26,7 @@ API do projeto, escrita em Node.JS. Serve de backend tanto para o frontend de ge
 
 - *Postgres* - Storage principal para a aplicação, armazena todos os dados da agenda.
 - *Mongo DB* - Utilizado para armazenar alguns tipos de dados menos importantes, como notificações enviadas para os usuários.
-- *Redis* - Utilizado como mecanismos de cache para a aplicação.
+- *Redis* - Utilizado como mecanismo de cache para a aplicação.
 
 ### Frontend
 Frontend do módulo de gerenciamento web. Escrito em React.JS. Permite que os profissionais gerenciem suas agendas.
